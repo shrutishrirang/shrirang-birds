@@ -114,6 +114,9 @@ export const bird = defineType({
       title: 'Photos',
       type: 'array',
       description: 'Up to 2 photos. First image is shown in the grid.',
+      options: {
+        layout: 'grid',
+      },
       of: [
         {
           type: 'image',

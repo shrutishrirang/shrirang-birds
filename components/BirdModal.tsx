@@ -17,6 +17,7 @@ interface Props {
 
 export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
   const [activeImageIndex, setActiveImageIndex] = useState(0)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const firstImage = bird.images?.[0]
   const secondImage = bird.images?.[1]
   const activeImage = bird.images?.[activeImageIndex] ?? firstImage
@@ -49,7 +50,7 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
   return (
     // Backdrop
     <div
-      className="fixed inset-0 z-50 bg-bark-dark/85 backdrop-blur-sm flex items-center justify-center p-4 md:p-8"
+      className={`fixed inset-0 z-50 bg-bark-dark/85 backdrop-blur-sm flex items-center justify-center transition-all ${isFullscreen ? 'p-0' : 'p-4 md:p-8'}`}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -57,12 +58,41 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
     >
       {/* Panel */}
       <div
-        className="modal-panel bg-parchment-50 w-full h-full md:w-[95vw] md:h-[95vh] max-w-none max-h-none flex flex-col md:flex-row overflow-hidden md:rounded-sm shadow-2xl"
+        className={`modal-panel bg-parchment-50 flex flex-col md:flex-row overflow-hidden shadow-2xl transition-all duration-300 ${
+          isFullscreen 
+            ? 'w-screen h-screen md:w-screen md:h-screen md:max-w-none md:max-h-none rounded-none' 
+            : 'w-full h-full md:w-[95vw] md:h-[95vh] max-w-none max-h-none md:rounded-sm'
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
 
         {/* ── Left: image area ───────────────────────────────────────────────── */}
         <div className="relative flex-1 bg-parchment-200 min-h-[50vh] md:min-h-0">
+          {/* Fullscreen / Close Controls */}
+          <div className="absolute top-3 right-3 flex gap-2 z-10">
+            <button
+              onClick={() => setIsFullscreen(!isFullscreen)}
+              className="bg-parchment-50/80 hover:bg-parchment-50 text-bark-DEFAULT w-9 h-9 flex items-center justify-center transition-colors"
+              aria-label={isFullscreen ? "Show Details" : "Hide Details"}
+              title={isFullscreen ? "Show Details" : "Hide Details"}
+            >
+              {isFullscreen ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" /></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" /></svg>
+              )}
+            </button>
+            {isFullscreen && (
+              <button
+                onClick={onClose}
+                className="bg-parchment-50/80 hover:bg-parchment-50 text-bark-DEFAULT w-9 h-9 flex items-center justify-center transition-colors font-display text-xs"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
           {imageUrl ? (
             <Image
               src={imageUrl}
@@ -116,6 +146,7 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
         </div>
 
         {/* ── Right: details panel ───────────────────────────────────────────── */}
+        {!isFullscreen && (
         <div className="w-full md:w-80 flex flex-col overflow-y-auto">
 
           {/* Close button */}
@@ -172,6 +203,7 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
             </p>
           </div>
         </div>
+        )}
       </div>
     </div>
   )
