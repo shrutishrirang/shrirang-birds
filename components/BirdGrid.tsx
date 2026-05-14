@@ -36,7 +36,7 @@ export default function BirdGrid({ birds }: Props) {
       return arr
     }
 
-    setShuffledBirds([...featured, ...shuffle(withPhoto), ...shuffle(withoutPhoto)])
+    setShuffledBirds([...shuffle(featured), ...shuffle(withPhoto), ...shuffle(withoutPhoto)])
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // intentionally run once on mount only
 
@@ -125,7 +125,7 @@ export default function BirdGrid({ birds }: Props) {
               key={c}
               onClick={() => setCountry(c)}
               className={`
-                font-display font-light text-[11px] tracking-widest uppercase px-4 py-1.5
+                font-display font-light text-[11px] tracking-widest uppercase px-4 py-2 leading-none
                 border transition-all duration-200
                 ${country === c
                   ? 'bg-forest text-parchment-50 border-forest'

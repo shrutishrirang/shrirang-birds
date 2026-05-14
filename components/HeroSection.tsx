@@ -60,7 +60,6 @@ export default function HeroSection({ birdCount }: Props) {
             className="inline-flex items-center gap-3 font-display font-light text-xs tracking-widest2 uppercase bg-forest text-parchment-50 border border-forest px-8 py-3 hover:bg-forest-dark transition-all duration-300"
           >
             Explore the Collection
-            <span className="text-base leading-none" aria-hidden>↓</span>
           </Link>
         </div>
       </div>

@@ -6,14 +6,14 @@ import './globals.css'
 
 const josefin = Josefin_Sans({
   subsets: ['latin'],
-  weight: ['100', '200', '300', '400', '600'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-josefin',
   display: 'swap',
 })
 
 const nunito = Nunito_Sans({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-nunito',
   display: 'swap',
 })

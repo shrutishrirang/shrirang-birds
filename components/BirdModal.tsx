@@ -58,7 +58,7 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
     >
       {/* Panel */}
       <div
-        className={`modal-panel bg-black/10 flex flex-col md:flex-row overflow-hidden shadow-2xl transition-all duration-300 ${isFullscreen
+        className={`modal-panel bg-black/80 flex flex-col md:flex-row overflow-hidden shadow-2xl transition-all duration-300 ${isFullscreen
           ? 'w-screen h-screen md:w-screen md:h-screen md:max-w-none md:max-h-none rounded-none'
           : 'w-full h-full md:w-[95vw] md:h-[95vh] max-w-none max-h-none md:rounded-sm'
           }`}
@@ -146,7 +146,7 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
 
         {/* ── Right: details panel ───────────────────────────────────────────── */}
         {!isFullscreen && (
-          <div className="w-full md:w-80 flex flex-col overflow-y-auto bg-black/[0.15]">
+          <div className="w-full md:w-80 flex flex-col overflow-y-auto bg-black/80 border-t md:border-t-0 md:border-l border-white/10">
 
             {/* Close button */}
             <div className="flex justify-end p-4 pb-0">

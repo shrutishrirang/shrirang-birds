@@ -3,10 +3,22 @@
 @tailwind utilities;
 
 /* ── Scrollbar (subtle, earthy) ─────────────────────────────────────────────── */
-::-webkit-scrollbar               { width: 6px; }
-::-webkit-scrollbar-track         { background: #F4EFE6; }
-::-webkit-scrollbar-thumb         { background: #DDD4C4; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover   { background: #9E8E7A; }
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F4EFE6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #DDD4C4;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9E8E7A;
+}
 
 /* ── Selection ──────────────────────────────────────────────────────────────── */
 ::selection {
@@ -15,12 +27,15 @@
 }
 
 /* ── Smooth scroll ───────────────────────────────────────────────────────────── */
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 /* ── Bird grid card hover scale ─────────────────────────────────────────────── */
 .bird-card-image {
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
 .bird-card:hover .bird-card-image {
   transform: scale(1.04);
 }
@@ -30,38 +45,103 @@ html { scroll-behavior: smooth; }
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+
 .bird-card:hover .bird-card-overlay {
   opacity: 1;
 }
 
 /* ── Modal animation ─────────────────────────────────────────────────────────── */
 @keyframes modal-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0);    }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 .modal-panel {
   animation: modal-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* ── Nav fade-in ─────────────────────────────────────────────────────────────── */
 @keyframes fade-down {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0);    }
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 .nav-animate {
   animation: fade-down 0.5s ease forwards;
 }
 
 /* ── Hero stagger ────────────────────────────────────────────────────────────── */
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0);    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.hero-line { opacity: 0; animation: fade-up 0.7s ease forwards; }
-.hero-line-1 { animation-delay: 0.1s; }
-.hero-line-2 { animation-delay: 0.3s; }
-.hero-line-3 { animation-delay: 0.5s; }
-.hero-line-4 { animation-delay: 0.7s; }
+
+.hero-line {
+  opacity: 0;
+  animation: fade-up 0.7s ease forwards;
+}
+
+.hero-line-1 {
+  animation-delay: 0.1s;
+}
+
+.hero-line-2 {
+  animation-delay: 0.3s;
+}
+
+.hero-line-3 {
+  animation-delay: 0.5s;
+}
+
+.hero-line-4 {
+  animation-delay: 0.7s;
+}
 
 /* ── Table row hover ─────────────────────────────────────────────────────────── */
-.db-row:hover td { background-color: #F0EAE0; }
+.db-row:hover td {
+  background-color: #F0EAE0;
+}
+
+/* ── Custom Font Weight Enhancements ────────────────────────────────────────── */
+/* Bump base body font weight from 400 to 500 for better overall readability */
+body {
+  font-weight: 500;
+}
+
+/* Map thin/light display weights to robust, thicker variants for Josefin Sans */
+.font-display.font-thin {
+  font-weight: 400;
+  /* Originally 100 -> Now Medium (500) */
+}
+
+.font-display.font-light {
+  font-weight: 500;
+  /* Originally 300 -> Now SemiBold (600) */
+}
+
+/* Map light body weights to thicker variants for Nunito Sans */
+.font-body.font-light {
+  font-weight: 400;
+  /* Originally 300 -> Now Medium (500) */
+}
