@@ -8,7 +8,7 @@ export default defineConfig({
   title: 'Shrirang Birds — Studio',
 
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset:   process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
 
   plugins: [
     structureTool({
@@ -24,6 +24,7 @@ export default defineConfig({
                 S.documentList()
                   .title('All Birds')
                   .schemaType('bird')
+                  .filter('_type == "bird"')
                   .defaultOrdering([
                     { field: 'taxonomicOrder', direction: 'asc' },
                   ])
