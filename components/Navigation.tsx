@@ -29,26 +29,27 @@ export default function Navigation() {
         ${scrolled || !isHome ? 'py-4' : 'py-6'}
       `}
     >
-      <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        {/* Wordmark */}
+      <nav className="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between gap-4">
+        {/* Wordmark — full name on md+, initials on mobile */}
         <Link
           href="/"
-          className="font-display font-light text-sm tracking-widest2 uppercase text-bark-DEFAULT hover:text-forest transition-colors"
+          className="font-display font-light text-sm tracking-widest2 uppercase text-bark-DEFAULT hover:text-forest transition-colors shrink-0"
         >
-          Shrirang Mukta
+          <span className="hidden sm:inline">Shrirang Mukta</span>
+          <span className="sm:hidden">S. Mukta</span>
         </Link>
 
         {/* Links */}
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4 md:gap-8">
           {[
             { href: '/#collection', label: 'Collection' },
-            { href: '/database',    label: 'Database'   },
-            { href: '/about',       label: 'About'      },
+            { href: '/database', label: 'Database' },
+            { href: '/about', label: 'About' },
           ].map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className="font-display font-light text-xs tracking-widest uppercase text-bark-mid hover:text-forest transition-colors"
+              className="font-display font-light text-[10px] md:text-xs tracking-widest uppercase text-bark-mid hover:text-forest transition-colors whitespace-nowrap"
             >
               {label}
             </Link>
