@@ -26,7 +26,7 @@ export default function BirdGrid({ birds }: Props) {
   // Build sorted family list for the dropdown
   const families = useMemo(() => {
     const set = new Set(birds.map((b) => b.family))
-    return ['All', ...[...set].sort()]
+    return ['All', ...Array.from(set).sort()]
   }, [birds])
 
   // Filter logic
