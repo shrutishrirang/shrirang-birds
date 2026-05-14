@@ -19,6 +19,7 @@ export const ALL_BIRDS_QUERY = groq`
       "_key": _key,
       asset,
       hotspot,
+      crop,
       "url": asset->url
     }
   }
@@ -42,6 +43,7 @@ export const BIRD_BY_SLUG_QUERY = groq`
       "_key": _key,
       asset,
       hotspot,
+      crop,
       "url": asset->url
     }
   }

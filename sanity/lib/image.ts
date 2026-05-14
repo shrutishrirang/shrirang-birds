@@ -27,8 +27,11 @@ export function gridThumbUrl(source: SanityImageSource): string {
  * Returns the full-quality image URL for the modal detail view.
  * No crop applied — shows the full original composition.
  */
-export function fullImageUrl(source: SanityImageSource): string {
-  return urlForImage(source)
+export function fullImageUrl(source: any): string {
+  // By passing only the asset reference (ignoring the crop data attached to the source object),
+  // we guarantee that the full original image is returned without any crops applied.
+  const ref = source?.asset?._ref || source?._ref || source
+  return urlForImage(ref)
     .width(1400)
     .quality(88)
     .auto('format')

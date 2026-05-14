@@ -11,6 +11,12 @@ export interface SanityImageAsset {
     width: number
     height: number
   }
+  crop?: {
+    top: number
+    bottom: number
+    left: number
+    right: number
+  }
 }
 
 export interface Bird {
