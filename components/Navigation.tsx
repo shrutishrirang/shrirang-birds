@@ -8,15 +8,14 @@ export default function Navigation() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
 
-  // Studio gets no nav — it has its own chrome
-  if (pathname?.startsWith('/studio')) return null
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const isStudio = pathname?.startsWith('/studio')
   useEffect(() => {
+    if (isStudio) return
     const onScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [isStudio])
+  if (isStudio) return null
 
   const isHome = pathname === '/'
 
