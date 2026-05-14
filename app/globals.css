@@ -2,28 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Custom properties ─────────────────────────────────────────────────────── */
-:root {
-  --color-bg:         #F4EFE6;
-  --color-card:       #FDFAF6;
-  --color-border:     #DDD4C4;
-  --color-text-1:     #1E1610;
-  --color-text-2:     #5C5044;
-  --color-text-3:     #9E8E7A;
-  --color-forest:     #4A7C59;
-  --color-forest-l:   #6B9E7A;
-}
-
 /* ── Scrollbar (subtle, earthy) ─────────────────────────────────────────────── */
 ::-webkit-scrollbar               { width: 6px; }
-::-webkit-scrollbar-track         { background: var(--color-bg); }
-::-webkit-scrollbar-thumb         { background: var(--color-border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover   { background: var(--color-text-3); }
+::-webkit-scrollbar-track         { background: #F4EFE6; }
+::-webkit-scrollbar-thumb         { background: #DDD4C4; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover   { background: #9E8E7A; }
 
 /* ── Selection ──────────────────────────────────────────────────────────────── */
 ::selection {
   background-color: #4A7C5930;
-  color: var(--color-text-1);
+  color: #1E1610;
 }
 
 /* ── Smooth scroll ───────────────────────────────────────────────────────────── */

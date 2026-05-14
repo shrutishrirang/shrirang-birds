@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import type { Bird } from '@/types'
+import { parseFamilyCode } from '@/lib/parseFamily'
 
 interface Props {
   birds: Bird[]
@@ -10,10 +11,7 @@ interface Props {
 type SortKey = 'taxonomicOrder' | 'commonName' | 'scientificName' | 'country' | 'family'
 type SortDir = 'asc' | 'desc'
 
-function parseFamily(family: string) {
-  const m = family?.match(/^(\w+)\s*\((.+)\)$/)
-  return m ? m[1] : family
-}
+
 
 export default function BirdTable({ birds }: Props) {
   const [search, setSearch]     = useState('')
@@ -142,7 +140,7 @@ export default function BirdTable({ birds }: Props) {
                   {bird.scientificName}
                 </td>
                 <td className="px-4 py-2.5 font-body text-xs text-bark-mid">
-                  {parseFamily(bird.family)}
+                  {parseFamilyCode(bird.family)}
                 </td>
                 <td className="px-4 py-2.5 font-body text-xs text-bark-mid">
                   <span className="inline-flex items-center gap-1">

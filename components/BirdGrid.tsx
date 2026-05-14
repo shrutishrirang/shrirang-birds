@@ -1,45 +1,56 @@
 'use client'
 
-import { useMemo, useState, useCallback } from 'react'
+import { useMemo, useState, useCallback, useEffect } from 'react'
 import type { Bird } from '@/types'
 import BirdCard from './BirdCard'
 import BirdModal from './BirdModal'
+import { parseFamilyCode } from '@/lib/parseFamily'
 
 interface Props {
   birds: Bird[]
 }
 
-// Parse "Anatidae (Ducks, Geese, and Waterfowl)" → { code, common }
-function parseFamily(family: string) {
-  const m = family?.match(/^(\w+)\s*\((.+)\)$/)
-  return m ? { code: m[1], common: m[2] } : { code: family, common: '' }
-}
+
 
 const COUNTRIES = ['All', 'India', 'Kenya', 'Costa Rica', 'Colombia', 'Vietnam']
 
 export default function BirdGrid({ birds }: Props) {
-  const [country, setCountry]       = useState('All')
-  const [family,  setFamily]        = useState('All')
-  const [search,  setSearch]        = useState('')
-  const [active,  setActive]        = useState<Bird | null>(null)
+  const [country, setCountry] = useState('All')
+  const [family,  setFamily]  = useState('All')
+  const [search,  setSearch]  = useState('')
+  const [active,  setActive]  = useState<Bird | null>(null)
 
-  // Build sorted family list for the dropdown
+  // Shuffle once on mount: featured birds first, rest in random order
+  const [shuffledBirds, setShuffledBirds] = useState<Bird[]>(birds)
+  useEffect(() => {
+    const featured = birds.filter((b) => b.isFeatured)
+    const rest     = birds.filter((b) => !b.isFeatured)
+    // Fisher-Yates shuffle
+    for (let i = rest.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [rest[i], rest[j]] = [rest[j], rest[i]]
+    }
+    setShuffledBirds([...featured, ...rest])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // intentionally run once on mount only
+
+  // Build sorted family list for the dropdown (from full list, not filtered)
   const families = useMemo(() => {
     const set = new Set(birds.map((b) => b.family))
     return ['All', ...Array.from(set).sort()]
   }, [birds])
 
-  // Filter logic
+  // Filter logic — operates on the shuffled list to preserve random order
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim()
-    return birds.filter((b) => {
+    return shuffledBirds.filter((b) => {
       if (country !== 'All' && b.country !== country) return false
       if (family  !== 'All' && b.family  !== family)  return false
       if (q && !b.commonName.toLowerCase().includes(q) &&
                !b.scientificName.toLowerCase().includes(q)) return false
       return true
     })
-  }, [birds, country, family, search])
+  }, [shuffledBirds, country, family, search])
 
   const openModal  = useCallback((b: Bird) => setActive(b), [])
   const closeModal = useCallback(()         => setActive(null), [])
@@ -134,7 +145,7 @@ export default function BirdGrid({ birds }: Props) {
         >
           <option value="All">All Families</option>
           {families.slice(1).map((f) => {
-            const { code, common } = parseFamily(f)
+            const { code, common } = { code: parseFamilyCode(f), common: f.match(/^\w+\s*\((.+)\)$/)?.[1] ?? '' }
             return (
               <option key={f} value={f}>
                 {code}{common ? ` — ${common}` : ''}

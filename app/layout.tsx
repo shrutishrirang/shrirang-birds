@@ -19,7 +19,7 @@ const nunito = Nunito_Sans({
 })
 
 const maiandra = localFont({
-  src: '../public/fonts/maiandra.ttf',
+  src: './fonts/maiandra.ttf',
   variable: '--font-maiandra',
   display: 'swap',
 })

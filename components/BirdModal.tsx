@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import type { Bird } from '@/types'
 import { fullImageUrl } from '@/sanity/lib/image'
+import { parseFamily } from '@/lib/parseFamily'
 
 interface Props {
   bird:    Bird
@@ -12,15 +13,17 @@ interface Props {
   onNext:  () => void
 }
 
-function parseFamily(family: string) {
-  const m = family?.match(/^(\w+)\s*\((.+)\)$/)
-  return m ? { code: m[1], common: m[2] } : { code: family, common: '' }
-}
+
 
 export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
+  const [activeImageIndex, setActiveImageIndex] = useState(0)
   const firstImage  = bird.images?.[0]
   const secondImage = bird.images?.[1]
+  const activeImage = bird.images?.[activeImageIndex] ?? firstImage
   const { code: familyCode, common: familyCommon } = parseFamily(bird.family)
+
+  // Reset to first image when bird changes
+  useEffect(() => { setActiveImageIndex(0) }, [bird._id])
 
   // Keyboard navigation
   useEffect(() => {
@@ -39,9 +42,9 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
     return () => { document.body.style.overflow = '' }
   }, [])
 
-  const imageUrl = firstImage?.asset
-    ? fullImageUrl(firstImage)
-    : (firstImage?.url ?? null)
+  const imageUrl = activeImage?.asset
+    ? fullImageUrl(activeImage)
+    : (activeImage?.url ?? null)
 
   return (
     // Backdrop
@@ -76,12 +79,18 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
             </div>
           )}
 
-          {/* Second image thumbnail (if available) */}
+          {/* Second image thumbnail (if available) — click to swap */}
           {secondImage && (
-            <div className="absolute bottom-3 right-3 w-16 h-20 border-2 border-parchment-50 overflow-hidden opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
+            <div
+              onClick={() => setActiveImageIndex(activeImageIndex === 0 ? 1 : 0)}
+              className="absolute bottom-3 right-3 w-16 h-20 border-2 border-parchment-50 overflow-hidden opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
+              title="Click to switch photo"
+            >
               <Image
-                src={secondImage.asset ? fullImageUrl(secondImage) : (secondImage.url ?? '')}
-                alt={`${bird.commonName} — second photo`}
+                src={(activeImageIndex === 0 ? secondImage : firstImage)?.asset
+                  ? fullImageUrl(activeImageIndex === 0 ? secondImage! : firstImage!)
+                  : ((activeImageIndex === 0 ? secondImage : firstImage)?.url ?? '')}
+                alt={`${bird.commonName} — ${activeImageIndex === 0 ? 'second' : 'first'} photo`}
                 fill
                 className="object-cover"
                 unoptimized
@@ -157,7 +166,7 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-4 border-t border-parchment-300">
+          <div className="px-6 py-4 border-t border-parchment-300 hidden md:block">
             <p className="font-display font-light text-[9px] tracking-widest2 uppercase text-bark-light">
               Use ← → arrow keys to navigate
             </p>

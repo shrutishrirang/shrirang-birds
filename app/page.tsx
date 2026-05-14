@@ -8,10 +8,17 @@ import type { Bird } from '@/types'
 export const revalidate = 3600
 
 export default async function HomePage() {
-  const [birds, count]: [Bird[], number] = await Promise.all([
-    client.fetch(ALL_BIRDS_QUERY),
-    client.fetch(BIRD_COUNT_QUERY),
-  ])
+  let birds: Bird[] = []
+  let count = 0
+
+  try {
+    ;[birds, count] = await Promise.all([
+      client.fetch(ALL_BIRDS_QUERY),
+      client.fetch(BIRD_COUNT_QUERY),
+    ])
+  } catch (err) {
+    console.error('Failed to fetch birds from Sanity:', err)
+  }
 
   return (
     <main>

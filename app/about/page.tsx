@@ -1,11 +1,21 @@
 import type { Metadata } from 'next'
+import { client } from '@/sanity/lib/client'
+import { BIRD_COUNT_QUERY } from '@/sanity/lib/queries'
 
 export const metadata: Metadata = {
   title: 'About — Shrirang Mukta',
   description: 'About Shrirang Mukta — bird photographer and curious birder.',
 }
 
-export default function AboutPage() {
+export const revalidate = 3600
+
+export default async function AboutPage() {
+  let count = 0
+  try {
+    count = await client.fetch(BIRD_COUNT_QUERY)
+  } catch (err) {
+    console.error('Failed to fetch bird count:', err)
+  }
   return (
     <main className="min-h-screen">
       {/* Header */}
@@ -28,7 +38,7 @@ export default function AboutPage() {
           <div className="w-12 h-px bg-forest mb-8" />
           <p className="font-body text-base text-bark-mid leading-relaxed mb-4">
             Shrirang Mukta is a bird photographer and passionate naturalist whose lens has followed
-            over {/* count */}1,400 species across five countries — India, Kenya, Costa Rica,
+            over {count.toLocaleString()} species across five countries — India, Kenya, Costa Rica,
             Colombia, and Vietnam.
           </p>
           <p className="font-body text-base text-bark-mid leading-relaxed mb-4">
