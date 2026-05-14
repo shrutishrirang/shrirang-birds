@@ -58,21 +58,20 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
     >
       {/* Panel */}
       <div
-        className={`modal-panel bg-parchment-50 flex flex-col md:flex-row overflow-hidden shadow-2xl transition-all duration-300 ${
-          isFullscreen 
-            ? 'w-screen h-screen md:w-screen md:h-screen md:max-w-none md:max-h-none rounded-none' 
-            : 'w-full h-full md:w-[95vw] md:h-[95vh] max-w-none max-h-none md:rounded-sm'
-        }`}
+        className={`modal-panel bg-black/10 flex flex-col md:flex-row overflow-hidden shadow-2xl transition-all duration-300 ${isFullscreen
+          ? 'w-screen h-screen md:w-screen md:h-screen md:max-w-none md:max-h-none rounded-none'
+          : 'w-full h-full md:w-[95vw] md:h-[95vh] max-w-none max-h-none md:rounded-sm'
+          }`}
         onClick={(e) => e.stopPropagation()}
       >
 
         {/* ── Left: image area ───────────────────────────────────────────────── */}
-        <div className="relative flex-1 bg-parchment-200 min-h-[50vh] md:min-h-0">
+        <div className="relative flex-1 bg-transparent min-h-[50vh] md:min-h-0">
           {/* Fullscreen / Close Controls */}
           <div className="absolute top-3 right-3 flex gap-2 z-10">
             <button
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="bg-parchment-50/80 hover:bg-parchment-50 text-bark-DEFAULT w-9 h-9 flex items-center justify-center transition-colors"
+              className="bg-black/30 hover:bg-black/50 text-parchment-50 w-9 h-9 flex items-center justify-center transition-colors"
               aria-label={isFullscreen ? "Show Details" : "Hide Details"}
               title={isFullscreen ? "Show Details" : "Hide Details"}
             >
@@ -85,7 +84,7 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
             {isFullscreen && (
               <button
                 onClick={onClose}
-                className="bg-parchment-50/80 hover:bg-parchment-50 text-bark-DEFAULT w-9 h-9 flex items-center justify-center transition-colors font-display text-xs"
+                className="bg-black/30 hover:bg-black/50 text-parchment-50 w-9 h-9 flex items-center justify-center transition-colors font-display text-xs"
                 aria-label="Close"
               >
                 ✕
@@ -131,14 +130,14 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
           {/* Prev / Next arrows */}
           <button
             onClick={onPrev}
-            className="absolute left-3 top-1/2 -translate-y-1/2 bg-parchment-50/80 hover:bg-parchment-50 text-bark-DEFAULT w-9 h-9 flex items-center justify-center transition-colors"
+            className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-parchment-50 w-9 h-9 flex items-center justify-center transition-colors"
             aria-label="Previous bird"
           >
             ←
           </button>
           <button
             onClick={onNext}
-            className="absolute right-3 top-1/2 -translate-y-1/2 bg-parchment-50/80 hover:bg-parchment-50 text-bark-DEFAULT w-9 h-9 flex items-center justify-center transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-parchment-50 w-9 h-9 flex items-center justify-center transition-colors"
             aria-label="Next bird"
           >
             →
@@ -147,62 +146,62 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
 
         {/* ── Right: details panel ───────────────────────────────────────────── */}
         {!isFullscreen && (
-        <div className="w-full md:w-80 flex flex-col overflow-y-auto">
+          <div className="w-full md:w-80 flex flex-col overflow-y-auto bg-black/[0.15]">
 
-          {/* Close button */}
-          <div className="flex justify-end p-4 pb-0">
-            <button
-              onClick={onClose}
-              className="font-display text-xs tracking-widest text-bark-light hover:text-bark-DEFAULT transition-colors w-8 h-8 flex items-center justify-center"
-              aria-label="Close"
-            >
-              ✕
-            </button>
-          </div>
+            {/* Close button */}
+            <div className="flex justify-end p-4 pb-0">
+              <button
+                onClick={onClose}
+                className="font-display text-xs tracking-widest text-parchment-300 hover:text-parchment-50 transition-colors w-8 h-8 flex items-center justify-center"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
 
-          {/* Names */}
-          <div className="px-6 pt-2 pb-6 border-b border-parchment-300">
-            <h2 className="font-display font-light text-xl text-bark-DEFAULT tracking-wide leading-snug">
-              {bird.commonName}
-            </h2>
-            <p className="font-body text-sm italic text-bark-light mt-1">
-              {bird.scientificName}
-            </p>
-          </div>
+            {/* Names */}
+            <div className="px-6 pt-2 pb-6 border-b border-white/10">
+              <h2 className="font-display font-light text-xl text-parchment-50 tracking-wide leading-snug">
+                {bird.commonName}
+              </h2>
+              <p className="font-body text-sm italic text-parchment-300 mt-1">
+                {bird.scientificName}
+              </p>
+            </div>
 
-          {/* Metadata table */}
-          <div className="px-6 py-6 flex-1">
-            <table className="w-full">
-              <tbody>
-                {[
-                  { label: 'Country', value: bird.country },
-                  { label: 'Family', value: familyCode },
-                  { label: '', value: familyCommon ? `(${familyCommon})` : '', italic: true },
-                  { label: 'Taxonomic Order', value: bird.taxonomicOrder?.toString() },
-                  { label: 'Photos', value: `${bird.images?.length ?? 0} / 2` },
-                ].filter(r => r.value).map(({ label, value, italic }) => (
-                  <tr key={`${label}-${value}`} className="align-top">
-                    {label ? (
-                      <td className="font-display font-light text-[10px] tracking-widest uppercase text-bark-light py-2 pr-4 whitespace-nowrap w-1/2">
-                        {label}
+            {/* Metadata table */}
+            <div className="px-6 py-6 flex-1">
+              <table className="w-full">
+                <tbody>
+                  {[
+                    { label: 'Country', value: bird.country },
+                    { label: 'Family', value: familyCode },
+                    { label: '', value: familyCommon ? `(${familyCommon})` : '', italic: true },
+                    { label: 'Taxonomic Order', value: bird.taxonomicOrder?.toString() },
+                    { label: 'Photos', value: `${bird.images?.length ?? 0} / 2` },
+                  ].filter(r => r.value).map(({ label, value, italic }) => (
+                    <tr key={`${label}-${value}`} className="align-top">
+                      {label ? (
+                        <td className="font-display font-light text-[10px] tracking-widest uppercase text-parchment-300 py-2 pr-4 whitespace-nowrap w-1/2">
+                          {label}
+                        </td>
+                      ) : <td />}
+                      <td className={`font-body text-sm text-parchment-50 py-2 ${italic ? 'italic text-parchment-300 text-xs' : ''}`}>
+                        {value}
                       </td>
-                    ) : <td />}
-                    <td className={`font-body text-sm text-bark-DEFAULT py-2 ${italic ? 'italic text-bark-light text-xs' : ''}`}>
-                      {value}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-          {/* Footer */}
-          <div className="px-6 py-4 border-t border-parchment-300 hidden md:block">
-            <p className="font-display font-light text-[9px] tracking-widest2 uppercase text-bark-light">
-              Use ← → arrow keys to navigate
-            </p>
+            {/* Footer */}
+            <div className="px-6 py-4 border-t border-white/10 hidden md:block">
+              <p className="font-display font-light text-[9px] tracking-widest2 uppercase text-parchment-300">
+                Use ← → arrow keys to navigate
+              </p>
+            </div>
           </div>
-        </div>
         )}
       </div>
     </div>
