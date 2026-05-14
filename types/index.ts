@@ -1,5 +1,6 @@
 export interface SanityImageAsset {
   _key?: string
+  url?: string
   asset: {
     _ref: string
     url?: string
