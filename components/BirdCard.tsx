@@ -59,10 +59,6 @@ export default function BirdCard({ bird, onClick }: Props) {
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
           className="bird-card-image object-cover"
-          style={{
-            // Bias upward: birds are usually in the upper portion of the frame
-            objectPosition: 'center 20%',
-          }}
           loading="lazy"
           unoptimized // Sanity CDN already optimized the image
         />

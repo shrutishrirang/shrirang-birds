@@ -17,6 +17,7 @@ export function gridThumbUrl(source: SanityImageSource): string {
   return urlForImage(source)
     .width(600)
     .height(800)
+    .fit('crop')
     .quality(78)
     .auto('format') // serves WebP where supported
     .url()

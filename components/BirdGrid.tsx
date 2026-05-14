@@ -20,17 +20,23 @@ export default function BirdGrid({ birds }: Props) {
   const [search,  setSearch]  = useState('')
   const [active,  setActive]  = useState<Bird | null>(null)
 
-  // Shuffle once on mount: featured birds first, rest in random order
+  // Shuffle once on mount: featured birds first, then birds with photos, then the rest
   const [shuffledBirds, setShuffledBirds] = useState<Bird[]>(birds)
   useEffect(() => {
     const featured = birds.filter((b) => b.isFeatured)
-    const rest     = birds.filter((b) => !b.isFeatured)
-    // Fisher-Yates shuffle
-    for (let i = rest.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [rest[i], rest[j]] = [rest[j], rest[i]]
+    const withPhoto = birds.filter((b) => !b.isFeatured && b.images && b.images.length > 0)
+    const withoutPhoto = birds.filter((b) => !b.isFeatured && (!b.images || b.images.length === 0))
+
+    const shuffle = (array: Bird[]) => {
+      const arr = [...array]
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]]
+      }
+      return arr
     }
-    setShuffledBirds([...featured, ...rest])
+
+    setShuffledBirds([...featured, ...shuffle(withPhoto), ...shuffle(withoutPhoto)])
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // intentionally run once on mount only
 

@@ -7,17 +7,17 @@ import { fullImageUrl } from '@/sanity/lib/image'
 import { parseFamily } from '@/lib/parseFamily'
 
 interface Props {
-  bird:    Bird
+  bird: Bird
   onClose: () => void
-  onPrev:  () => void
-  onNext:  () => void
+  onPrev: () => void
+  onNext: () => void
 }
 
 
 
 export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
   const [activeImageIndex, setActiveImageIndex] = useState(0)
-  const firstImage  = bird.images?.[0]
+  const firstImage = bird.images?.[0]
   const secondImage = bird.images?.[1]
   const activeImage = bird.images?.[activeImageIndex] ?? firstImage
   const { code: familyCode, common: familyCommon } = parseFamily(bird.family)
@@ -28,9 +28,9 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
   // Keyboard navigation
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape')       onClose()
-      if (e.key === 'ArrowRight')   onNext()
-      if (e.key === 'ArrowLeft')    onPrev()
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowRight') onNext()
+      if (e.key === 'ArrowLeft') onPrev()
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
@@ -57,7 +57,7 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
     >
       {/* Panel */}
       <div
-        className="modal-panel bg-parchment-50 w-full max-w-5xl max-h-[92vh] flex flex-col md:flex-row overflow-hidden"
+        className="modal-panel bg-parchment-50 w-full h-full md:w-[95vw] md:h-[95vh] max-w-none max-h-none flex flex-col md:flex-row overflow-hidden md:rounded-sm shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
 
@@ -144,11 +144,11 @@ export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
             <table className="w-full">
               <tbody>
                 {[
-                  { label: 'Country',           value: bird.country },
-                  { label: 'Family',            value: familyCode },
-                  { label: '',                  value: familyCommon ? `(${familyCommon})` : '', italic: true },
-                  { label: 'Taxonomic Order',   value: bird.taxonomicOrder?.toString() },
-                  { label: 'Photos',            value: `${bird.images?.length ?? 0} / 2` },
+                  { label: 'Country', value: bird.country },
+                  { label: 'Family', value: familyCode },
+                  { label: '', value: familyCommon ? `(${familyCommon})` : '', italic: true },
+                  { label: 'Taxonomic Order', value: bird.taxonomicOrder?.toString() },
+                  { label: 'Photos', value: `${bird.images?.length ?? 0} / 2` },
                 ].filter(r => r.value).map(({ label, value, italic }) => (
                   <tr key={`${label}-${value}`} className="align-top">
                     {label ? (
