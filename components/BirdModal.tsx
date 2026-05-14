@@ -1,0 +1,169 @@
+'use client'
+
+import { useEffect } from 'react'
+import Image from 'next/image'
+import type { Bird } from '@/types'
+import { fullImageUrl } from '@/sanity/lib/image'
+
+interface Props {
+  bird:    Bird
+  onClose: () => void
+  onPrev:  () => void
+  onNext:  () => void
+}
+
+function parseFamily(family: string) {
+  const m = family?.match(/^(\w+)\s*\((.+)\)$/)
+  return m ? { code: m[1], common: m[2] } : { code: family, common: '' }
+}
+
+export default function BirdModal({ bird, onClose, onPrev, onNext }: Props) {
+  const firstImage  = bird.images?.[0]
+  const secondImage = bird.images?.[1]
+  const { code: familyCode, common: familyCommon } = parseFamily(bird.family)
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape')       onClose()
+      if (e.key === 'ArrowRight')   onNext()
+      if (e.key === 'ArrowLeft')    onPrev()
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose, onNext, onPrev])
+
+  // Lock body scroll while modal open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  const imageUrl = firstImage?.asset
+    ? fullImageUrl(firstImage)
+    : (firstImage?.url ?? null)
+
+  return (
+    // Backdrop
+    <div
+      className="fixed inset-0 z-50 bg-bark-dark/85 backdrop-blur-sm flex items-center justify-center p-4 md:p-8"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={bird.commonName}
+    >
+      {/* Panel */}
+      <div
+        className="modal-panel bg-parchment-50 w-full max-w-5xl max-h-[92vh] flex flex-col md:flex-row overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+
+        {/* ── Left: image area ───────────────────────────────────────────────── */}
+        <div className="relative flex-1 bg-parchment-200 min-h-[50vh] md:min-h-0">
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={bird.commonName}
+              fill
+              className="object-contain" // full uncropped view
+              sizes="(max-width: 768px) 100vw, 65vw"
+              priority
+              unoptimized
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <p className="font-display text-bark-light tracking-wide">No photo yet</p>
+            </div>
+          )}
+
+          {/* Second image thumbnail (if available) */}
+          {secondImage && (
+            <div className="absolute bottom-3 right-3 w-16 h-20 border-2 border-parchment-50 overflow-hidden opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
+              <Image
+                src={secondImage.asset ? fullImageUrl(secondImage) : (secondImage.url ?? '')}
+                alt={`${bird.commonName} — second photo`}
+                fill
+                className="object-cover"
+                unoptimized
+              />
+            </div>
+          )}
+
+          {/* Prev / Next arrows */}
+          <button
+            onClick={onPrev}
+            className="absolute left-3 top-1/2 -translate-y-1/2 bg-parchment-50/80 hover:bg-parchment-50 text-bark-DEFAULT w-9 h-9 flex items-center justify-center transition-colors"
+            aria-label="Previous bird"
+          >
+            ←
+          </button>
+          <button
+            onClick={onNext}
+            className="absolute right-3 top-1/2 -translate-y-1/2 bg-parchment-50/80 hover:bg-parchment-50 text-bark-DEFAULT w-9 h-9 flex items-center justify-center transition-colors"
+            aria-label="Next bird"
+          >
+            →
+          </button>
+        </div>
+
+        {/* ── Right: details panel ───────────────────────────────────────────── */}
+        <div className="w-full md:w-80 flex flex-col overflow-y-auto">
+
+          {/* Close button */}
+          <div className="flex justify-end p-4 pb-0">
+            <button
+              onClick={onClose}
+              className="font-display text-xs tracking-widest text-bark-light hover:text-bark-DEFAULT transition-colors w-8 h-8 flex items-center justify-center"
+              aria-label="Close"
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Names */}
+          <div className="px-6 pt-2 pb-6 border-b border-parchment-300">
+            <h2 className="font-display font-light text-xl text-bark-DEFAULT tracking-wide leading-snug">
+              {bird.commonName}
+            </h2>
+            <p className="font-body text-sm italic text-bark-light mt-1">
+              {bird.scientificName}
+            </p>
+          </div>
+
+          {/* Metadata table */}
+          <div className="px-6 py-6 flex-1">
+            <table className="w-full">
+              <tbody>
+                {[
+                  { label: 'Country',           value: bird.country },
+                  { label: 'Family',            value: familyCode },
+                  { label: '',                  value: familyCommon ? `(${familyCommon})` : '', italic: true },
+                  { label: 'Taxonomic Order',   value: bird.taxonomicOrder?.toString() },
+                  { label: 'Photos',            value: `${bird.images?.length ?? 0} / 2` },
+                ].filter(r => r.value).map(({ label, value, italic }) => (
+                  <tr key={`${label}-${value}`} className="align-top">
+                    {label ? (
+                      <td className="font-display font-light text-[10px] tracking-widest uppercase text-bark-light py-2 pr-4 whitespace-nowrap w-1/2">
+                        {label}
+                      </td>
+                    ) : <td />}
+                    <td className={`font-body text-sm text-bark-DEFAULT py-2 ${italic ? 'italic text-bark-light text-xs' : ''}`}>
+                      {value}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Footer */}
+          <div className="px-6 py-4 border-t border-parchment-300">
+            <p className="font-display font-light text-[9px] tracking-widest2 uppercase text-bark-light">
+              Use ← → arrow keys to navigate
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

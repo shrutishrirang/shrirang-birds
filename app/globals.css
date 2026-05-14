@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Custom properties ─────────────────────────────────────────────────────── */
+:root {
+  --color-bg:         #F4EFE6;
+  --color-card:       #FDFAF6;
+  --color-border:     #DDD4C4;
+  --color-text-1:     #1E1610;
+  --color-text-2:     #5C5044;
+  --color-text-3:     #9E8E7A;
+  --color-forest:     #4A7C59;
+  --color-forest-l:   #6B9E7A;
+}
+
+/* ── Scrollbar (subtle, earthy) ─────────────────────────────────────────────── */
+::-webkit-scrollbar               { width: 6px; }
+::-webkit-scrollbar-track         { background: var(--color-bg); }
+::-webkit-scrollbar-thumb         { background: var(--color-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover   { background: var(--color-text-3); }
+
+/* ── Selection ──────────────────────────────────────────────────────────────── */
+::selection {
+  background-color: #4A7C5930;
+  color: var(--color-text-1);
+}
+
+/* ── Smooth scroll ───────────────────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
+/* ── Bird grid card hover scale ─────────────────────────────────────────────── */
+.bird-card-image {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bird-card:hover .bird-card-image {
+  transform: scale(1.04);
+}
+
+/* ── Overlay fade ─────────────────────────────────────────────────────────────── */
+.bird-card-overlay {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.bird-card:hover .bird-card-overlay {
+  opacity: 1;
+}
+
+/* ── Modal animation ─────────────────────────────────────────────────────────── */
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+.modal-panel {
+  animation: modal-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Nav fade-in ─────────────────────────────────────────────────────────────── */
+@keyframes fade-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+.nav-animate {
+  animation: fade-down 0.5s ease forwards;
+}
+
+/* ── Hero stagger ────────────────────────────────────────────────────────────── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+.hero-line { opacity: 0; animation: fade-up 0.7s ease forwards; }
+.hero-line-1 { animation-delay: 0.1s; }
+.hero-line-2 { animation-delay: 0.3s; }
+.hero-line-3 { animation-delay: 0.5s; }
+.hero-line-4 { animation-delay: 0.7s; }
+
+/* ── Table row hover ─────────────────────────────────────────────────────────── */
+.db-row:hover td { background-color: #F0EAE0; }

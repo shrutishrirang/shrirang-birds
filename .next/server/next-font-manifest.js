@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/shrutikulkarni/Documents/codework/shrirang-birds/app/layout\":[\"static/media/accc82dc8525882b-s.p.woff2\",\"static/media/68180864d7f93f02.p.woff2\",\"static/media/5166fff47006ddd4-s.p.ttf\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
