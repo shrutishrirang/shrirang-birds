@@ -89,11 +89,16 @@ export default async function AboutPage() {
         </div>
 
         {/* Footer note */}
-        <div className="mt-16 pt-8 border-t border-parchment-300 flex items-center gap-4">
-          <div className="w-6 h-px bg-forest" />
-          <p className="font-display font-light text-[10px] tracking-widest uppercase text-bark-light">
-            All photographs © Shrirang Mukta. All rights reserved.
-          </p>
+        <div className="mt-16 pt-8 border-t border-parchment-300 flex items-start gap-4">
+          <div className="w-6 h-px bg-forest mt-1.5" />
+          <div className="flex flex-col gap-1">
+            <p className="font-display font-light text-[10px] tracking-widest uppercase text-bark-light">
+              All photographs © Shrirang Mukta. All rights reserved.
+            </p>
+            <p className="font-display font-light text-[10px] tracking-widest uppercase text-bark-light">
+              Website designed and developed by Shruti Shrirang
+            </p>
+          </div>
         </div>
       </div>
     </main>
