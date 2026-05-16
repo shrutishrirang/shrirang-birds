@@ -41,7 +41,7 @@ export default function Navigation() {
         {/* Links */}
         <div className="flex items-center gap-4 md:gap-8">
           {[
-            { href: '/#collection', label: 'Collection' },
+            { href: '/#gallery', label: 'Gallery' },
             { href: '/database', label: 'Database' },
             { href: '/about', label: 'About' },
           ].map(({ href, label }) => (

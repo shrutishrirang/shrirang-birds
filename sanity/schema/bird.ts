@@ -60,11 +60,11 @@ export const bird = defineType({
       type: 'string',
       options: {
         list: [
-          { title: 'India',      value: 'India' },
-          { title: 'Kenya',      value: 'Kenya' },
+          { title: 'India', value: 'India' },
+          { title: 'Kenya', value: 'Kenya' },
           { title: 'Costa Rica', value: 'Costa Rica' },
-          { title: 'Colombia',   value: 'Colombia' },
-          { title: 'Vietnam',    value: 'Vietnam' },
+          { title: 'Colombia', value: 'Colombia' },
+          { title: 'Vietnam', value: 'Vietnam' },
         ],
         layout: 'radio',
       },
@@ -86,7 +86,7 @@ export const bird = defineType({
       name: 'isFeatured',
       title: '🌟 Showcase / Star Marked',
       type: 'boolean',
-      description: 'Mark this bird to display it at the very top of your collection grid.',
+      description: 'Mark this bird to display it at the very top of your gallery grid.',
       initialValue: false,
     }),
 

@@ -72,13 +72,13 @@ export default function BirdGrid({ birds }: Props) {
   }, [active, filtered])
 
   return (
-    <section id="collection" className="max-w-7xl mx-auto px-4 md:px-6 pb-24">
+    <section id="gallery" className="max-w-7xl mx-auto px-4 md:px-6 pb-24">
 
       {/* Section header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pt-16 pb-10 border-b border-parchment-300">
         <div>
           <p className="font-display font-light text-[10px] tracking-widest3 uppercase text-forest mb-1">
-            The Collection
+            The Gallery
           </p>
           <h2 className="font-display font-thin text-3xl md:text-4xl text-bark-DEFAULT tracking-wide">
             {filtered.length.toLocaleString()}

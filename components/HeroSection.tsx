@@ -56,10 +56,10 @@ export default function HeroSection({ birdCount }: Props) {
         {/* CTA */}
         <div className="hero-line hero-line-4">
           <Link
-            href="#collection"
+            href="#gallery"
             className="inline-flex items-center gap-3 font-display font-light text-xs tracking-widest2 uppercase bg-forest text-parchment-50 border border-forest px-8 py-3 hover:bg-forest-dark transition-all duration-300"
           >
-            Explore the Birds Archive
+            Explore the Gallery
           </Link>
         </div>
       </div>
