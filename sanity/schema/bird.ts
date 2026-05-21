@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { CountryAutocomplete } from './CountryAutocomplete'
 
 export const bird = defineType({
   name: 'bird',
@@ -58,16 +59,10 @@ export const bird = defineType({
       name: 'country',
       title: 'Country',
       type: 'string',
-      options: {
-        list: [
-          { title: 'India', value: 'India' },
-          { title: 'Kenya', value: 'Kenya' },
-          { title: 'Costa Rica', value: 'Costa Rica' },
-          { title: 'Colombia', value: 'Colombia' },
-          { title: 'Vietnam', value: 'Vietnam' },
-        ],
-        layout: 'radio',
+      components: {
+        input: CountryAutocomplete,
       },
+      description: 'Select an existing country or type a new one to add it.',
       validation: (Rule) => Rule.required(),
     }),
     defineField({

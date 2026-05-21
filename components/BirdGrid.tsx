@@ -12,13 +12,17 @@ interface Props {
 
 
 
-const COUNTRIES = ['All', 'India', 'Kenya', 'Costa Rica', 'Colombia', 'Vietnam']
-
 export default function BirdGrid({ birds }: Props) {
   const [country, setCountry] = useState('All')
   const [family,  setFamily]  = useState('All')
   const [search,  setSearch]  = useState('')
   const [active,  setActive]  = useState<Bird | null>(null)
+
+  // Build sorted country list dynamically from the actual birds in the database
+  const countries = useMemo(() => {
+    const set = new Set(birds.map((b) => b.country).filter(Boolean))
+    return ['All', ...Array.from(set).sort()]
+  }, [birds])
 
   // Shuffle once on mount: featured birds first, then birds with photos, then the rest
   const [shuffledBirds, setShuffledBirds] = useState<Bird[]>(birds)
@@ -120,7 +124,7 @@ export default function BirdGrid({ birds }: Props) {
 
         {/* Country pills */}
         <div className="flex flex-wrap gap-2">
-          {COUNTRIES.map((c) => (
+          {countries.map((c) => (
             <button
               key={c}
               onClick={() => setCountry(c)}

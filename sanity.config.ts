@@ -12,9 +12,15 @@ export default defineConfig({
 
   plugins: [
     structureTool({
-      // Custom sidebar structure: one list, sorted by Taxonomic Order
-      structure: (S) =>
-        S.list()
+      // Custom sidebar structure: dynamically fetched, sorted by Taxonomic Order
+      structure: async (S, context) => {
+        const client = context.getClient({ apiVersion: '2024-01-01' })
+        const countries: string[] = await client.fetch(
+          `array::unique(*[_type == "bird" && defined(country)].country)`
+        )
+        const sortedCountries = (countries || []).filter(Boolean).sort()
+
+        return S.list()
           .title('Content')
           .items([
             S.listItem()
@@ -36,7 +42,7 @@ export default defineConfig({
                 S.list()
                   .title('By Country')
                   .items(
-                    ['India', 'Kenya', 'Costa Rica', 'Colombia', 'Vietnam'].map((c) =>
+                    sortedCountries.map((c) =>
                       S.listItem()
                         .title(c)
                         .child(
@@ -50,7 +56,8 @@ export default defineConfig({
                     )
                   )
               ),
-          ]),
+          ])
+      },
     }),
     visionTool(), // lets you run GROQ queries directly — useful for debugging
   ],

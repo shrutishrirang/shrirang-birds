@@ -35,4 +35,4 @@ export interface Bird {
   familyCommonName?: string
 }
 
-export type Country = 'India' | 'Kenya' | 'Costa Rica' | 'Colombia' | 'Vietnam'
+export type Country = string
