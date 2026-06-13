@@ -1,5 +1,6 @@
 import { defineField, defineType } from 'sanity'
 import { CountryAutocomplete } from './CountryAutocomplete'
+import { CompressedImageInput } from './CompressedImageInput'
 
 export const bird = defineType({
   name: 'bird',
@@ -120,6 +121,11 @@ export const bird = defineType({
             // Click the focal point icon on any image to set where the
             // bird's head is — this is used by Option B smart crop later.
             hotspot: true,
+          },
+          // Auto-compresses photos to <1 MB / 1600px / 90% quality
+          // before upload. Settings: sanity/lib/imageCompression.ts
+          components: {
+            input: CompressedImageInput,
           },
         },
       ],
