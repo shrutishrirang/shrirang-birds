@@ -1,74 +1,69 @@
 'use client'
 
 import { useMemo, useState, useCallback, useEffect } from 'react'
-import type { Bird } from '@/types'
-import BirdCard from './BirdCard'
-import BirdModal from './BirdModal'
-import { parseFamilyCode } from '@/lib/parseFamily'
+import type { Wildlife } from '@/types'
+import WildlifeCard from './WildlifeCard'
+import WildlifeModal from './WildlifeModal'
 
 interface Props {
-  birds: Bird[]
+  wildlife: Wildlife[]
 }
 
+export default function WildlifeGrid({ wildlife }: Props) {
+  const [country,  setCountry]  = useState('All')
+  const [group,    setGroup]    = useState('All')
+  const [search,   setSearch]   = useState('')
+  const [active,   setActive]   = useState<Wildlife | null>(null)
 
-
-export default function BirdGrid({ birds }: Props) {
-  const [country, setCountry] = useState('All')
-  const [family,  setFamily]  = useState('All')
-  const [search,  setSearch]  = useState('')
-  const [active,  setActive]  = useState<Bird | null>(null)
-
-  // Build sorted country list dynamically from the actual birds in the database
+  // Build sorted country list dynamically from the actual entries in the database
   const countries = useMemo(() => {
-    const set = new Set(birds.map((b) => b.country).filter(Boolean))
+    const set = new Set(wildlife.map((w) => w.country).filter(Boolean))
     return ['All', ...Array.from(set).sort()]
-  }, [birds])
+  }, [wildlife])
 
-  // Shuffle once on mount: featured birds first, then birds with photos, then the rest
-  const [shuffledBirds, setShuffledBirds] = useState<Bird[]>(birds)
+  // Build sorted animal group list
+  const groups = useMemo(() => {
+    const set = new Set(wildlife.map((w) => w.animalGroup).filter(Boolean))
+    return ['All', ...Array.from(set).sort()]
+  }, [wildlife])
+
+  // Shuffle once on mount: featured first, then with photos, then without
+  const [shuffled, setShuffled] = useState<Wildlife[]>(wildlife)
   useEffect(() => {
-    const featured = birds.filter((b) => b.isFeatured)
-    const withPhoto = birds.filter((b) => !b.isFeatured && b.images && b.images.length > 0)
-    const withoutPhoto = birds.filter((b) => !b.isFeatured && (!b.images || b.images.length === 0))
+    const featured    = wildlife.filter((w) => w.isFeatured)
+    const withPhoto   = wildlife.filter((w) => !w.isFeatured && w.images && w.images.length > 0)
+    const withoutPhoto = wildlife.filter((w) => !w.isFeatured && (!w.images || w.images.length === 0))
 
-    const shuffle = (array: Bird[]) => {
-      const arr = [...array]
-      for (let i = arr.length - 1; i > 0; i--) {
+    const shuffle = (arr: Wildlife[]) => {
+      const a = [...arr]
+      for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]]
+        [a[i], a[j]] = [a[j], a[i]]
       }
-      return arr
+      return a
     }
-
-    setShuffledBirds([...shuffle(featured), ...shuffle(withPhoto), ...shuffle(withoutPhoto)])
+    setShuffled([...shuffle(featured), ...shuffle(withPhoto), ...shuffle(withoutPhoto)])
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // intentionally run once on mount only
 
-  // Build sorted family list for the dropdown (from full list, not filtered)
-  const families = useMemo(() => {
-    const set = new Set(birds.map((b) => b.family))
-    return ['All', ...Array.from(set).sort()]
-  }, [birds])
-
-  // Filter logic — operates on the shuffled list to preserve random order
+  // Filter logic
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim()
-    return shuffledBirds.filter((b) => {
-      if (country !== 'All' && b.country !== country) return false
-      if (family  !== 'All' && b.family  !== family)  return false
-      if (q && !b.commonName.toLowerCase().includes(q) &&
-               !b.scientificName.toLowerCase().includes(q)) return false
+    return shuffled.filter((w) => {
+      if (country !== 'All' && w.country    !== country) return false
+      if (group   !== 'All' && w.animalGroup !== group)  return false
+      if (q && !w.commonName.toLowerCase().includes(q) &&
+               !w.scientificName.toLowerCase().includes(q)) return false
       return true
     })
-  }, [shuffledBirds, country, family, search])
+  }, [shuffled, country, group, search])
 
-  const openModal  = useCallback((b: Bird) => setActive(b), [])
-  const closeModal = useCallback(()         => setActive(null), [])
+  const openModal   = useCallback((w: Wildlife) => setActive(w), [])
+  const closeModal  = useCallback(() => setActive(null), [])
 
-  // Navigate modal prev/next within filtered list
   const navigateModal = useCallback((dir: 'prev' | 'next') => {
     if (!active) return
-    const idx = filtered.findIndex((b) => b._id === active._id)
+    const idx = filtered.findIndex((w) => w._id === active._id)
     const next = dir === 'next'
       ? filtered[(idx + 1) % filtered.length]
       : filtered[(idx - 1 + filtered.length) % filtered.length]
@@ -76,18 +71,18 @@ export default function BirdGrid({ birds }: Props) {
   }, [active, filtered])
 
   return (
-    <section id="gallery" className="max-w-7xl mx-auto px-4 md:px-6 pb-24">
+    <section id="wildlife-gallery" className="max-w-7xl mx-auto px-4 md:px-6 pb-24">
 
       {/* Section header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pt-16 pb-10 border-b border-parchment-300">
         <div>
           <p className="font-display font-light text-[10px] tracking-widest3 uppercase text-forest mb-1">
-            Birds Gallery
+            Wildlife Gallery
           </p>
           <h2 className="font-display font-thin text-3xl md:text-4xl text-bark-DEFAULT tracking-wide">
             {filtered.length.toLocaleString()}
             <span className="text-bark-light text-2xl ml-2">
-              / {birds.length.toLocaleString()} species
+              / {wildlife.length.toLocaleString()} species
             </span>
           </h2>
         </div>
@@ -141,27 +136,22 @@ export default function BirdGrid({ birds }: Props) {
           ))}
         </div>
 
-        {/* Family dropdown */}
+        {/* Animal Group dropdown */}
         <select
-          value={family}
-          onChange={(e) => setFamily(e.target.value)}
+          value={group}
+          onChange={(e) => setGroup(e.target.value)}
           className="
             font-body text-sm text-bark-DEFAULT bg-parchment-50
             border border-parchment-300 px-4 py-1.5
             focus:outline-none focus:border-forest
             transition-colors sm:ml-auto cursor-pointer
           "
-          aria-label="Filter by family"
+          aria-label="Filter by animal group"
         >
-          <option value="All">All Families</option>
-          {families.slice(1).map((f) => {
-            const { code, common } = { code: parseFamilyCode(f), common: f.match(/^\w+\s*\((.+)\)$/)?.[1] ?? '' }
-            return (
-              <option key={f} value={f}>
-                {code}{common ? ` — ${common}` : ''}
-              </option>
-            )
-          })}
+          <option value="All">All Groups</option>
+          {groups.slice(1).map((g) => (
+            <option key={g} value={g}>{g}</option>
+          ))}
         </select>
       </div>
 
@@ -179,15 +169,15 @@ export default function BirdGrid({ birds }: Props) {
 
       {/* Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
-        {filtered.map((bird) => (
-          <BirdCard key={bird._id} bird={bird} onClick={openModal} />
+        {filtered.map((w) => (
+          <WildlifeCard key={w._id} wildlife={w} onClick={openModal} />
         ))}
       </div>
 
       {/* Modal */}
       {active && (
-        <BirdModal
-          bird={active}
+        <WildlifeModal
+          wildlife={active}
           onClose={closeModal}
           onPrev={() => navigateModal('prev')}
           onNext={() => navigateModal('next')}

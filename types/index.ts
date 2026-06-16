@@ -1,3 +1,5 @@
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+
 export interface SanityImageAsset {
   _key?: string
   url?: string
@@ -30,9 +32,31 @@ export interface Bird {
   slug: string
   images: SanityImageAsset[]
   isFeatured?: boolean
-  // Derived helpers (computed client-side)
-  familyCode?: string
-  familyCommonName?: string
 }
 
-export type Country = string
+/**
+ * Enforced union of valid animal groups — matches the options list in
+ * sanity/schema/wildlife.ts. TypeScript will catch any typo or unlisted value.
+ */
+export type AnimalGroup =
+  | 'Mammal'
+  | 'Reptile'
+  | 'Amphibian'
+  | 'Fish'
+  | 'Insect'
+  | 'Arachnid'
+  | 'Other'
+
+export interface Wildlife {
+  _id: string
+  commonName: string
+  scientificName: string
+  country: string
+  animalGroup: AnimalGroup
+  slug: string
+  images: SanityImageAsset[]
+  isFeatured?: boolean
+}
+
+// Re-export SanityImageSource for convenience in image utility files
+export type { SanityImageSource }

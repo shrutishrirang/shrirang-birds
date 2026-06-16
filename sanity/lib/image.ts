@@ -1,6 +1,7 @@
 import imageUrlBuilder from '@sanity/image-url'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 import { client } from './client'
+import type { SanityImageAsset } from '@/types'
 
 const builder = imageUrlBuilder(client)
 
@@ -27,11 +28,17 @@ export function gridThumbUrl(source: SanityImageSource): string {
  * Returns the full-quality image URL for the modal detail view.
  * No crop applied — shows the full original composition.
  */
-export function fullImageUrl(source: any): string {
-  // By passing only the asset reference (ignoring the crop data attached to the source object),
-  // we guarantee that the full original image is returned without any crops applied.
-  const ref = source?.asset?._ref || source?._ref || source
-  return urlForImage(ref)
+export function fullImageUrl(source: SanityImageAsset | SanityImageSource): string {
+  // Narrow to our own SanityImageAsset shape (has an `asset` sub-object) before
+  // accessing asset._ref. Falls back to treating source as a plain ref string.
+  const isSanityAsset = (s: unknown): s is SanityImageAsset =>
+    typeof s === 'object' && s !== null && 'asset' in s
+
+  const ref = isSanityAsset(source)
+    ? source.asset?._ref
+    : (source as { _ref?: string })?._ref ?? source
+
+  return urlForImage(ref as SanityImageSource)
     .width(1400)
     .quality(88)
     .auto('format')

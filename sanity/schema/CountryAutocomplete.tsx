@@ -8,9 +8,9 @@ export function CountryAutocomplete(props: StringInputProps) {
   const [countries, setCountries] = useState<string[]>([])
 
   useEffect(() => {
-    // Query already-entered country names from the database dynamically
+    // Query existing country names from both birds and wildlife
     client
-      .fetch(`array::unique(*[_type == "bird" && defined(country)].country)`)
+      .fetch(`array::unique(*[_type in ["bird", "wildlife"] && defined(country)].country)`)
       .then((data: string[]) => {
         const list = (data || []).filter(Boolean).sort()
         setCountries(list)

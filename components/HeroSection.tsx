@@ -27,12 +27,10 @@ export default function HeroSection({ birdCount }: Props) {
           Photographer | Avid Birder
         </p>
 
-        {/* Name — the centrepiece */}
-        <h1 className="hero-line hero-line-2 font-maiandra font-thin text-[clamp(3rem,10vw,8rem)] leading-none tracking-widest uppercase text-bark-mid mb-2">
-          Shrirang
-        </h1>
+        {/* Name — the centrepiece (single h1 for SEO correctness) */}
         <h1 className="hero-line hero-line-2 font-maiandra font-thin text-[clamp(3rem,10vw,8rem)] leading-none tracking-widest uppercase text-bark-mid mb-10">
-          Mukta
+          <span className="block mb-2">Shrirang</span>
+          <span className="block">Mukta</span>
         </h1>
 
         {/* Stats row */}

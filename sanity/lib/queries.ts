@@ -25,19 +25,20 @@ export const ALL_BIRDS_QUERY = groq`
   }
 `
 
+/** Total species count — for the hero stat display. */
+export const BIRD_COUNT_QUERY = groq`count(*[_type == "bird"])`
+
 /**
- * Fetches a single bird by slug (used for potential future individual pages).
+ * Fetches all wildlife entries for the gallery + database pages.
  */
-export const BIRD_BY_SLUG_QUERY = groq`
-  *[_type == "bird" && slug.current == $slug][0] {
+export const ALL_WILDLIFE_QUERY = groq`
+  *[_type == "wildlife"] | order(isFeatured desc, commonName asc) {
     _id,
-    rowNumber,
     isFeatured,
     commonName,
     scientificName,
     country,
-    taxonomicOrder,
-    family,
+    animalGroup,
     "slug": slug.current,
     "images": images[]{
       "_key": _key,
@@ -49,5 +50,15 @@ export const BIRD_BY_SLUG_QUERY = groq`
   }
 `
 
-/** Total species count — for the hero stat display. */
-export const BIRD_COUNT_QUERY = groq`count(*[_type == "bird"])`
+/** Total wildlife count. */
+export const WILDLIFE_COUNT_QUERY = groq`count(*[_type == "wildlife"])`
+
+/**
+ * Unique countries from BOTH birds and wildlife combined.
+ * Used in generateMetadata() to build the dynamic site description.
+ */
+export const ALL_UNIQUE_COUNTRIES_QUERY = groq`
+  array::unique(
+    *[_type in ["bird", "wildlife"] && defined(country)].country
+  )
+`

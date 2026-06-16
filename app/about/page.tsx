@@ -5,6 +5,7 @@ import { BIRD_COUNT_QUERY } from '@/sanity/lib/queries'
 export const metadata: Metadata = {
   title: 'About — Shrirang Mukta',
   description: 'About Shrirang Mukta — bird photographer and curious birder.',
+  alternates: { canonical: '/about' },
 }
 
 export const revalidate = 3600

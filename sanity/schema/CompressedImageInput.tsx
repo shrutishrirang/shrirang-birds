@@ -16,10 +16,10 @@
 
 'use client'
 
-import React, { useCallback, useRef, useState } from 'react'
-import { ObjectInputProps, useClient, set, PatchEvent, setIfMissing, useFormValue } from 'sanity'
+import React, { useCallback, useId, useRef, useState } from 'react'
+import { ObjectInputProps, useClient, set, PatchEvent, setIfMissing } from 'sanity'
 import { Box, Button, Card, Flex, Spinner, Stack, Text, Badge, useToast } from '@sanity/ui'
-import { UploadIcon, CheckmarkIcon, ErrorOutlineIcon } from '@sanity/icons'
+import { UploadIcon, CheckmarkIcon } from '@sanity/icons'
 import imageCompression from 'browser-image-compression'
 import { IMAGE_COMPRESSION_OPTIONS } from '../lib/imageCompression'
 
@@ -42,6 +42,9 @@ export function CompressedImageInput(props: ObjectInputProps) {
   const client = useClient({ apiVersion: '2024-01-01' })
   const toast = useToast()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  // Unique ID per instance — prevents collision when both photo slots render simultaneously
+  const uid = useId()
+  const inputId = `compressed-image-upload-${uid}`
 
   const [status, setStatus] = useState<CompressionStatus>('idle')
   const [stats, setStats] = useState<{
@@ -235,14 +238,14 @@ export function CompressedImageInput(props: ObjectInputProps) {
             type="file"
             accept="image/png,image/jpeg,image/tiff,.png,.jpg,.jpeg,.tif,.tiff"
             style={{ display: 'none' }}
-            id="compressed-image-upload"
+            id={inputId}
             onChange={handleFileChange}
             disabled={status === 'compressing' || status === 'uploading'}
           />
 
           <Button
             as="label"
-            htmlFor="compressed-image-upload"
+            htmlFor={inputId}
             text={
               status === 'compressing'
                 ? 'Compressing…'

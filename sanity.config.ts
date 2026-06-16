@@ -2,6 +2,7 @@ import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
 import { bird } from './sanity/schema/bird'
+import { wildlife } from './sanity/schema/wildlife'
 
 export default defineConfig({
   name: 'shrirang-birds-studio',
@@ -15,14 +16,19 @@ export default defineConfig({
       // Custom sidebar structure: dynamically fetched, sorted by Taxonomic Order
       structure: async (S, context) => {
         const client = context.getClient({ apiVersion: '2024-01-01' })
-        const countries: string[] = await client.fetch(
-          `array::unique(*[_type == "bird" && defined(country)].country)`
-        )
-        const sortedCountries = (countries || []).filter(Boolean).sort()
+
+        // Fetch countries for both birds and wildlife for their "By Country" views
+        const [birdCountries, wildlifeCountries]: [string[], string[]] = await Promise.all([
+          client.fetch(`array::unique(*[_type == "bird" && defined(country)].country)`),
+          client.fetch(`array::unique(*[_type == "wildlife" && defined(country)].country)`),
+        ])
+        const sortedBirdCountries = (birdCountries || []).filter(Boolean).sort()
+        const sortedWildlifeCountries = (wildlifeCountries || []).filter(Boolean).sort()
 
         return S.list()
           .title('Content')
           .items([
+            // ── Birds ────────────────────────────────────────────────────────
             S.listItem()
               .title('All Birds')
               .schemaType('bird')
@@ -37,12 +43,12 @@ export default defineConfig({
               ),
             S.divider(),
             S.listItem()
-              .title('By Country')
+              .title('Birds by Country')
               .child(
                 S.list()
-                  .title('By Country')
+                  .title('Birds by Country')
                   .items(
-                    sortedCountries.map((c) =>
+                    sortedBirdCountries.map((c) =>
                       S.listItem()
                         .title(c)
                         .child(
@@ -56,6 +62,41 @@ export default defineConfig({
                     )
                   )
               ),
+
+            S.divider(),
+
+            // ── Wildlife ─────────────────────────────────────────────────────
+            S.listItem()
+              .title('All Wildlife')
+              .schemaType('wildlife')
+              .child(
+                S.documentList()
+                  .title('All Wildlife')
+                  .schemaType('wildlife')
+                  .filter('_type == "wildlife"')
+                  .defaultOrdering([{ field: 'commonName', direction: 'asc' }])
+              ),
+            S.divider(),
+            S.listItem()
+              .title('Wildlife by Country')
+              .child(
+                S.list()
+                  .title('Wildlife by Country')
+                  .items(
+                    sortedWildlifeCountries.map((c) =>
+                      S.listItem()
+                        .title(c)
+                        .child(
+                          S.documentList()
+                            .title(c)
+                            .schemaType('wildlife')
+                            .filter('_type == "wildlife" && country == $country')
+                            .params({ country: c })
+                            .defaultOrdering([{ field: 'commonName', direction: 'asc' }])
+                        )
+                    )
+                  )
+              ),
           ])
       },
     }),
@@ -63,6 +104,6 @@ export default defineConfig({
   ],
 
   schema: {
-    types: [bird],
+    types: [bird, wildlife],
   },
 })

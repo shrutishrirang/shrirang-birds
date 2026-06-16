@@ -50,6 +50,24 @@ html {
   opacity: 1;
 }
 
+/* ── Wildlife card hover (mirrors bird-card) ───────────────────────────────── */
+.wildlife-card-image {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wildlife-card:hover .wildlife-card-image {
+  transform: scale(1.04);
+}
+
+.wildlife-card-overlay {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.wildlife-card:hover .wildlife-card-overlay {
+  opacity: 1;
+}
+
 /* ── Modal animation ─────────────────────────────────────────────────────────── */
 @keyframes modal-in {
   from {
