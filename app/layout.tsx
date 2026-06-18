@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Josefin_Sans, Nunito_Sans } from 'next/font/google'
 import localFont from 'next/font/local'
 import Navigation from '@/components/Navigation'
+import { Analytics } from '@vercel/analytics/next'
 import { client } from '@/sanity/lib/client'
 import {
   BIRD_COUNT_QUERY,
@@ -86,6 +87,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-parchment-100 font-body text-bark-DEFAULT antialiased">
         <Navigation />
         {children}
+        <Analytics />
       </body>
     </html>
   )
