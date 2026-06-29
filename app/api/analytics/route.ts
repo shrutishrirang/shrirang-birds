@@ -14,8 +14,8 @@ export async function GET() {
   try {
     // Attempting to fetch total visits/pageviews
     // The exact query might need adjustment based on Vercel's API specifics,
-    // but this hits the count endpoint as per docs.
-    const url = `https://api.vercel.com/v1/projects/${projectId}/analytics/visits/count`;
+    // The correct endpoint for Vercel Web Analytics is /v1/web-analytics/projects/...
+    const url = `https://api.vercel.com/v1/web-analytics/projects/${projectId}/visits/count`;
     const res = await fetch(url, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -26,6 +26,7 @@ export async function GET() {
 
     if (!res.ok) {
       const text = await res.text();
+      console.error(`Vercel API error: ${res.statusText}`, text);
       return NextResponse.json({ error: `Vercel API error: ${res.statusText}`, details: text }, { status: res.status });
     }
 
