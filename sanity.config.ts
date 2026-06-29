@@ -3,6 +3,8 @@ import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
 import { bird } from './sanity/schema/bird'
 import { wildlife } from './sanity/schema/wildlife'
+import { dashboardTool } from '@sanity/dashboard'
+import { vercelAnalyticsWidget } from './sanity/widgets/VercelAnalyticsWidget'
 
 export default defineConfig({
   name: 'shrirang-birds-studio',
@@ -101,6 +103,11 @@ export default defineConfig({
       },
     }),
     visionTool(), // lets you run GROQ queries directly — useful for debugging
+    dashboardTool({
+      widgets: [
+        vercelAnalyticsWidget(),
+      ],
+    }),
   ],
 
   schema: {
