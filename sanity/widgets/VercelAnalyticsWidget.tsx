@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, Stack, Text, Flex, Spinner, Box } from '@sanity/ui';
 
 export function VercelAnalyticsWidgetComponent() {
-  const [data, setData] = useState<{ count?: number; error?: string } | null>(null);
+  const [data, setData] = useState<{ data?: { pageviews: number; visitors: number }; error?: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,7 +38,15 @@ export function VercelAnalyticsWidgetComponent() {
                 <Stack space={2}>
                   <Text size={1} muted>Total Page Views</Text>
                   <Text size={4} weight="semibold">
-                    {typeof data?.count === 'number' ? data.count.toLocaleString() : 'No data'}
+                    {typeof data?.data?.pageviews === 'number' ? data.data.pageviews.toLocaleString() : 'No data'}
+                  </Text>
+                </Stack>
+              </Card>
+              <Card padding={3} border radius={2} flex={1}>
+                <Stack space={2}>
+                  <Text size={1} muted>Total Visitors</Text>
+                  <Text size={4} weight="semibold">
+                    {typeof data?.data?.visitors === 'number' ? data.data.visitors.toLocaleString() : 'No data'}
                   </Text>
                 </Stack>
               </Card>

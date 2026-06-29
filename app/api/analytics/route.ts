@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   const token = process.env.VERCEL_ACCESS_TOKEN;
   const projectId = process.env.VERCEL_PROJECT_ID;
@@ -12,10 +14,21 @@ export async function GET() {
   }
 
   try {
-    // Attempting to fetch total visits/pageviews
-    // The exact query might need adjustment based on Vercel's API specifics,
-    // The correct endpoint for Vercel Web Analytics is /v1/web-analytics/projects/...
-    const url = `https://api.vercel.com/v1/web-analytics/projects/${projectId}/visits/count`;
+    // First, we need to find if this project belongs to a team, because the Analytics API requires it.
+    const projectUrl = `https://api.vercel.com/v1/projects/${projectId}`;
+    const projectRes = await fetch(projectUrl, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    if (!projectRes.ok) {
+      const text = await projectRes.text();
+      return NextResponse.json({ error: `Vercel API error fetching project: ${projectRes.statusText}`, details: text }, { status: projectRes.status });
+    }
+    const projectData = await projectRes.json();
+    const teamIdQuery = projectData.teamId ? `&teamId=${projectData.teamId}` : '';
+
+    // The correct endpoint for Vercel Web Analytics is /v1/query/web-analytics/...
+    const url = `https://api.vercel.com/v1/query/web-analytics/visits/count?projectId=${projectId}${teamIdQuery}`;
     const res = await fetch(url, {
       headers: {
         'Authorization': `Bearer ${token}`
