@@ -109,7 +109,7 @@ export const wildlife = defineType({
       name: 'images',
       title: 'Photos',
       type: 'array',
-      description: 'Up to 2 photos. First image is shown in the gallery grid.',
+      description: 'Up to 10 photos. First image is shown in the gallery grid.',
       options: {
         layout: 'grid',
       },
@@ -127,7 +127,7 @@ export const wildlife = defineType({
           },
         },
       ],
-      validation: (Rule) => Rule.max(2),
+      validation: (Rule) => Rule.max(10),
     }),
   ],
 })
