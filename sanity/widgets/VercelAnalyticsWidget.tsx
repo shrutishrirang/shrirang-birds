@@ -148,14 +148,14 @@ export function VercelAnalyticsWidgetComponent() {
             </Stack>
 
             {/* ── Top Pages ── */}
-            {data?.topPages?.filter(p => p.requestPath !== 'Others').length > 0 && (
+            {(data?.topPages ?? []).filter(p => p.requestPath !== 'Others').length > 0 && (
               <Stack space={3}>
                 <SectionHeading>Top Pages</SectionHeading>
                 <Divider />
                 <Stack space={0}>
-                  {data.topPages
+                  {(data?.topPages ?? [])
                     .filter((p) => p.requestPath !== 'Others')
-                    .map((page, i) => (
+                    .map((page, i, arr) => (
                       <React.Fragment key={page.requestPath}>
                         <StatRow
                           label={page.requestPath || '/'}
@@ -164,7 +164,7 @@ export function VercelAnalyticsWidgetComponent() {
                           barPct={Math.round((page.pageviews / maxPageViews) * 100)}
                           barColor="#3b82f6"
                         />
-                        {i < data.topPages.filter(p => p.requestPath !== 'Others').length - 1 && <Divider />}
+                        {i < arr.length - 1 && <Divider />}
                       </React.Fragment>
                     ))}
                 </Stack>
@@ -172,12 +172,12 @@ export function VercelAnalyticsWidgetComponent() {
             )}
 
             {/* ── Devices ── */}
-            {data?.deviceTypes?.length > 0 && (
+            {(data?.deviceTypes ?? []).length > 0 && (
               <Stack space={3}>
                 <SectionHeading>Devices</SectionHeading>
                 <Divider />
                 <Stack space={0}>
-                  {data.deviceTypes.map((d, i) => {
+                  {(data?.deviceTypes ?? []).map((d, i, arr) => {
                     const pct = Math.round((d.visitors / totalDevices) * 100);
                     return (
                       <React.Fragment key={d.deviceType}>
@@ -188,7 +188,7 @@ export function VercelAnalyticsWidgetComponent() {
                           barPct={pct}
                           barColor="#8b5cf6"
                         />
-                        {i < data.deviceTypes.length - 1 && <Divider />}
+                        {i < arr.length - 1 && <Divider />}
                       </React.Fragment>
                     );
                   })}
@@ -197,12 +197,12 @@ export function VercelAnalyticsWidgetComponent() {
             )}
 
             {/* ── Countries ── */}
-            {data?.topCountries?.length > 0 && (
+            {(data?.topCountries ?? []).length > 0 && (
               <Stack space={3}>
                 <SectionHeading>Countries</SectionHeading>
                 <Divider />
                 <Stack space={0}>
-                  {data.topCountries.map((c, i) => (
+                  {(data?.topCountries ?? []).map((c, i, arr) => (
                     <React.Fragment key={c.country}>
                       <StatRow
                         label={`${flagEmoji(c.country)}  ${c.country}`}
@@ -210,7 +210,7 @@ export function VercelAnalyticsWidgetComponent() {
                         barPct={Math.round((c.visitors / maxCountryVisitors) * 100)}
                         barColor="#10b981"
                       />
-                      {i < data.topCountries.length - 1 && <Divider />}
+                      {i < arr.length - 1 && <Divider />}
                     </React.Fragment>
                   ))}
                 </Stack>
@@ -218,12 +218,12 @@ export function VercelAnalyticsWidgetComponent() {
             )}
 
             {/* ── Referrers ── */}
-            {data?.topReferrers?.filter(r => r.referrerHostname).length > 0 && (
+            {(data?.topReferrers ?? []).filter(r => r.referrerHostname).length > 0 && (
               <Stack space={3}>
                 <SectionHeading>Referrers</SectionHeading>
                 <Divider />
                 <Stack space={0}>
-                  {data.topReferrers
+                  {(data?.topReferrers ?? [])
                     .filter((r) => r.referrerHostname)
                     .map((r, i, arr) => (
                       <React.Fragment key={r.referrerHostname}>
