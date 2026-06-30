@@ -6,7 +6,7 @@ export function VercelAnalyticsWidgetComponent() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/analytics')
+    fetch(`/api/analytics?t=${Date.now()}`)
       .then((res) => res.json())
       .then((resData) => {
         setData(resData);
