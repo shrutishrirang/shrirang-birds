@@ -39,8 +39,5 @@ export function fullImageUrl(source: SanityImageAsset | SanityImageSource): stri
     : (source as { _ref?: string })?._ref ?? source
 
   return urlForImage(ref as SanityImageSource)
-    .width(1400)
-    .quality(88)
-    .auto('format')
     .url()
 }
