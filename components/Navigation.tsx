@@ -41,7 +41,7 @@ export default function Navigation() {
         {/* Links */}
         <div className="flex items-center gap-4 md:gap-8">
           {[
-            { href: '/#gallery', label: 'Birds Gallery' },
+            { href: '/gallery', label: 'Birds Gallery' },
             { href: '/wildlife', label: 'Wildlife' },
             { href: '/database', label: 'Database' },
             { href: '/about', label: 'About' },

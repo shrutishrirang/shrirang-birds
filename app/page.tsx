@@ -1,7 +1,6 @@
 import { client } from '@/sanity/lib/client'
 import { ALL_BIRDS_QUERY, BIRD_COUNT_QUERY } from '@/sanity/lib/queries'
 import HeroSection from '@/components/HeroSection'
-import BirdGrid from '@/components/BirdGrid'
 import type { Bird } from '@/types'
 import type { Metadata } from 'next'
 
@@ -27,8 +26,7 @@ export default async function HomePage() {
 
   return (
     <main>
-      <HeroSection birdCount={count} />
-      <BirdGrid birds={birds} />
+      <HeroSection birdCount={count} birds={birds} />
     </main>
   )
 }

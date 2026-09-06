@@ -47,6 +47,14 @@ export async function GET(req: Request) {
       fetch(`${base}/visits/aggregate${commonParams}&by=referrerHostname&limit=5`, { headers }),
     ]);
 
+    if (!overviewRes.ok) {
+      const err = await overviewRes.json().catch(() => ({}));
+      return NextResponse.json(
+        { error: err?.error?.message || `Vercel Analytics query error (${overviewRes.status}: ${overviewRes.statusText})` },
+        { status: overviewRes.status }
+      );
+    }
+
     const [overview, pages, countries, devices, referrers] = await Promise.all([
       overviewRes.json(),
       pagesRes.json(),
