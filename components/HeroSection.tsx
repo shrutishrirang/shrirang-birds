@@ -88,7 +88,7 @@ export default function HeroSection({ birdCount, birds }: Props) {
             <button
               id="open-slideshow-btn"
               onClick={openConfig}
-              className="w-64 justify-center inline-flex items-center gap-3 font-display font-light text-xs tracking-widest2 uppercase bg-transparent text-forest border border-forest px-8 py-3 hover:bg-forest hover:text-parchment-50 transition-all duration-300"
+              className="w-64 justify-center inline-flex items-center gap-3 font-display font-light text-xs tracking-widest2 uppercase bg-forest text-parchment-50 border border-forest px-8 py-3 hover:bg-forest-dark transition-all duration-300"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M8 5v14l11-7z"/>
